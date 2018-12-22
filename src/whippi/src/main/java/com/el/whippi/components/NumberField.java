@@ -14,9 +14,8 @@ import com.el.whippi.htmldom.HtmlText;
  *
  * @author david
  */
-public final class TextField extends AComponent {
+public class NumberField extends AComponent {
 
-    private final boolean isPassword;
     private String label;
     private String value = "";
     private String infoMessage;
@@ -25,22 +24,17 @@ public final class TextField extends AComponent {
     
     private final FeValue<String> feValue;
 
-    public TextField() {
-        this(false);
-    }
-
-    public TextField(boolean isPassword) {
-        this.isPassword = isPassword;
+    public NumberField() {
         this.feValue = new FeValue<>("document.getElementById('" + getId() + "-input').value");
     }
 
-    public TextField withLabel(String label) {
+    public NumberField withLabel(String label) {
         this.label = label;
 
         return this;
     }
 
-    public TextField withValue(String value) {
+    public NumberField withValue(String value) {
         if (value == null) {
             value = "";
         }
@@ -49,19 +43,19 @@ public final class TextField extends AComponent {
         return this;
     }
 
-    public TextField withInfoMessage(String infoMessage) {
+    public NumberField withInfoMessage(String infoMessage) {
         this.infoMessage = infoMessage;
 
         return this;
     }
 
-    public TextField withErrorMessage(String errorMessage) {
+    public NumberField withErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
 
         return this;
     }
     
-    public TextField withDisabled(boolean disabled) {
+    public NumberField withDisabled(boolean disabled) {
         this.disabled = disabled;
         
         return this;
@@ -90,7 +84,7 @@ public final class TextField extends AComponent {
         HtmlTag input = new HtmlTag("input");
         res.withChildren(input);
         input.withAttribute("id", this.getId() + "-input");
-        input.withAttribute("type", isPassword ? "password" : "text");
+        input.withAttribute("type", "number");
         input.withAttribute("class", "form-control" + (this.errorMessage != null ? " is-invalid" : ""));
         input.withAttribute("style", "box-shadow: none;");
         input.withAttribute("value", this.value);

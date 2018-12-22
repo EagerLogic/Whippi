@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.stream.Collectors;
 import javax.servlet.ServletException;
@@ -54,37 +55,57 @@ public class WhippiServlet extends HttpServlet {
 
     private void processGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String servletPath = req.getServletPath();
-        
+
         APage page = Whippi.findPage(servletPath, req);
         if (page == null) {
             resp.sendError(404);
             return;
         }
-        
-        AController<?> controller = page.createController(req);
+
+        AController<?> controller = page.createController(req, resp);
         if (controller == null) {
             throw new NullPointerException("Page: " + page.getClass().getName() + " returned null as controller!");
         }
-        
-        Object model = controller.index();
-        
+
+        if (controller instanceof AAuthenticatedController) {
+            AAuthenticatedController authenticatedController = (AAuthenticatedController) controller;
+            try {
+                boolean authenticationSuccess = authenticatedController.doAuthenticate(req, resp);
+                if (!authenticationSuccess) {
+                    resp.setStatus(401);
+                    return;
+                }
+            } catch (RedirectException ex) {
+                resp.sendRedirect(ex.getUrl());
+                return;
+            }
+        }
+
+        Object model;
+        try {
+            model = controller.index();
+        } catch (RedirectException ex) {
+            resp.sendRedirect(ex.getUrl());
+            return;
+        }
+
         ATemplate<Object, ?> template = (ATemplate<Object, ?>) controller.createTemplate();
         AComponent rootComponent = template.render(model);
         AHtmlElement htmlRoot = rootComponent.render();
-        
+
         StringBuilder sb = new StringBuilder();
         htmlRoot.render(sb);
         String html = sb.toString();
 
         String feJs = readFeJs(req);
-        
+
         WhippiGetModel responseModel = new WhippiGetModel(model);
-        
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE, JsonTypeInfo.As.PROPERTY);
         String modelJson = mapper.writeValueAsString(responseModel);
-        
+
         resp.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -102,12 +123,12 @@ public class WhippiServlet extends HttpServlet {
             out.println(feJs);
             out.println("//]]>");
             out.println("</script>");
-            
+
             out.println("<style>");
             out.println("a:hover {text-decoration: none; opacity: 0.6;}");
             out.println(".modal {background-color: rgba(0,0,0, 0.75);}");
             out.println("</style>");
-            
+
             out.println("</head>");
             out.println("<body style=\"width: 100%; height: 100%;\">");
             out.println("<div id=\"whippiRoot\" style=\"width: 100%; height: 100%;\">");
@@ -115,6 +136,7 @@ public class WhippiServlet extends HttpServlet {
             out.println("</div>");
             out.println("<script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n"
                     + "<script src=\"https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js\" integrity=\"sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U\" crossorigin=\"anonymous\"></script>\n"
+                    + "<script src=\"https://cdn.rawgit.com/FezVrasta/snackbarjs/1.1.0/dist/snackbar.min.js\"></script>\n"
                     + "<script src=\"https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js\" integrity=\"sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9\" crossorigin=\"anonymous\"></script>\n"
                     + "<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); Whippi.init(\"" + modelJson.replace("\"", "\\\"") + "\"); });</script>");
             out.println("</body>");
@@ -124,60 +146,91 @@ public class WhippiServlet extends HttpServlet {
 
     private void processPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String servletPath = req.getServletPath();
-        
+
         String postStr = req.getReader().lines().collect(Collectors.joining());
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE, JsonTypeInfo.As.PROPERTY);
         WhippiPostRequest postData = mapper.readValue(postStr, WhippiPostRequest.class);
-        
+
         APage page = Whippi.findPage(servletPath, req);
         if (page == null) {
             resp.sendError(404);
             return;
         }
-        
-        AController<Object> controller = (AController<Object>) page.createController(req);
+
+        AController<Object> controller = (AController<Object>) page.createController(req, resp);
         if (controller == null) {
             throw new NullPointerException("Page: " + page.getClass().getName() + " returned null as controller!");
         }
-        
-        Object model = postData.getModel();
-        controller.init(model);
-        
-        Method[] methods = controller.getClass().getMethods();
-        Method method = null;
-        for (Method m : methods) {
-            if (m.getName().equals(postData.getMethodName())) {
-                method = m;
-                break;
+
+        boolean isAuthenticationSuccess = true;
+        String redirect = null;
+        if (controller instanceof AAuthenticatedController) {
+            AAuthenticatedController authenticatedController = (AAuthenticatedController) controller;
+            try {
+                isAuthenticationSuccess = authenticatedController.doAuthenticate(req, resp);
+                if (!isAuthenticationSuccess) {
+                    resp.setStatus(401);
+                    return;
+                }
+            } catch (RedirectException ex) {
+                redirect = ex.getUrl();
             }
         }
-        if (method == null) {
-            throw new RuntimeException("Can't find method: " + postData.getMethodName() + " in controller: " + controller.getClass().getName());
-        }
-        
-        try {
-            method.invoke(controller, postData.getParams());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-        
-        model = controller.getModel();
-        
-        ATemplate<Object, ?> template = (ATemplate<Object, ?>) controller.createTemplate();
-        AComponent rootComponent = template.render(model);
-        AHtmlElement htmlRoot = rootComponent.render();
-        
-        StringBuilder sb = new StringBuilder();
-        htmlRoot.render(sb);
-        String html = sb.toString();
-        
-        WhippiPostResponse respData = new WhippiPostResponse(html, model);
-        
-        String responseJson = mapper.writeValueAsString(respData);
-        
 
+        WhippiPostResponse respData = new WhippiPostResponse();
+        Object model = postData.getModel();
+
+        if (redirect == null) {
+
+            controller.init(model, postData.getTitle());
+
+            Method[] methods = controller.getClass().getMethods();
+            Method method = null;
+            for (Method m : methods) {
+                if (m.getName().equals(postData.getMethodName())) {
+                    method = m;
+                    break;
+                }
+            }
+            if (method == null) {
+                throw new RuntimeException("Can't find method: " + postData.getMethodName() + " in controller: " + controller.getClass().getName());
+            }
+
+            try {
+                method.invoke(controller, postData.getParams());
+            } catch (InvocationTargetException ex) {
+                Throwable tex = ex.getTargetException();
+                if (tex instanceof RedirectException) {
+                    redirect = ((RedirectException) tex).getUrl();
+                } else {
+                    throw new RuntimeException(tex);
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        if (redirect == null) {
+            model = controller.getModel();
+
+            ATemplate<Object, ?> template = (ATemplate<Object, ?>) controller.createTemplate();
+            AComponent rootComponent = template.render(model);
+            AHtmlElement htmlRoot = rootComponent.render();
+
+            StringBuilder sb = new StringBuilder();
+            htmlRoot.render(sb);
+            String html = sb.toString();
+
+            respData.setHtml(html);
+            respData.setModel(model);
+            respData.setTitle(controller.getTitle());
+        } else {
+            respData.setRedirect(redirect);
+        }
+
+        String responseJson = mapper.writeValueAsString(respData);
 
         resp.setContentType("text/json;charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {

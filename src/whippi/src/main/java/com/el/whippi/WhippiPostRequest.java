@@ -14,6 +14,7 @@ public class WhippiPostRequest {
     private Object model;
     private Object[] params;
     private String methodName;
+    private String title;
 
     public Object getModel() {
         return model;
@@ -25,6 +26,10 @@ public class WhippiPostRequest {
 
     public String getMethodName() {
         return methodName;
+    }
+
+    public String getTitle() {
+        return title;
     }
     
 }

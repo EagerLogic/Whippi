@@ -88,10 +88,10 @@ public class WhippiBeActionProcessor extends AbstractProcessor {
 
         TypeElement superClassElement = (TypeElement) this.processingEnv.getTypeUtils().asElement(superClasstype);
         System.out.println("Superclass: " + superClassElement.getQualifiedName());
-        if (!superClassElement.getQualifiedName().toString().equals("com.el.whippi.AController")) {
-            this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@BeAction annotation must be applied inside a Whippi controller!", methodElement);
-            return;
-        }
+//        if (!superClassElement.getQualifiedName().toString().equals("com.el.whippi.AController")) {
+//            this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@BeAction annotation must be applied inside a Whippi controller!", methodElement);
+//            return;
+//        }
 
         if (methodElement.getModifiers().contains(Modifier.ABSTRACT)) {
             this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@BeAction annotation can not be applied on abstract!", methodElement);

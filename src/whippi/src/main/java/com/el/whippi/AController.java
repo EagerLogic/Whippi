@@ -29,18 +29,21 @@ public abstract class AController<$Model> {
         if (title == null) {
             title = "Untitled";
         }
+        
+        this.title = title;
     }
     
     public final String getTitle() {
         return this.title;
     }
     
-    final void init($Model model) {
+    public final void init($Model model, String title) {
         this.setModel(model);
+        this.setTitle(title);
     }
     
     public abstract ATemplate<$Model, ? extends AController<$Model>> createTemplate();
     
-    public abstract $Model index();
+    public abstract $Model index() throws RedirectException;
     
 }

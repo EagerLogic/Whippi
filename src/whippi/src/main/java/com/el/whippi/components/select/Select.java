@@ -3,44 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.el.whippi.components;
+package com.el.whippi.components.select;
 
+import com.el.whippi.components.AComponent;
 import com.el.whippi.feactions.FeValue;
 import com.el.whippi.htmldom.AHtmlElement;
 import com.el.whippi.htmldom.HtmlTag;
 import com.el.whippi.htmldom.HtmlText;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author david
  */
-public final class TextField extends AComponent {
-
-    private final boolean isPassword;
+public class Select extends AComponent {
+    
     private String label;
     private String value = "";
     private String infoMessage;
     private String errorMessage;
     private boolean disabled = false;
+    private final List<SelectItem> items = new ArrayList<>();
     
     private final FeValue<String> feValue;
 
-    public TextField() {
-        this(false);
+    public Select() {
+        this.feValue = new FeValue<>("document.getElementById('" + getId() + "-select').value");
     }
 
-    public TextField(boolean isPassword) {
-        this.isPassword = isPassword;
-        this.feValue = new FeValue<>("document.getElementById('" + getId() + "-input').value");
-    }
-
-    public TextField withLabel(String label) {
+    public Select withLabel(String label) {
         this.label = label;
 
         return this;
     }
 
-    public TextField withValue(String value) {
+    public Select withValue(String value) {
         if (value == null) {
             value = "";
         }
@@ -49,20 +47,40 @@ public final class TextField extends AComponent {
         return this;
     }
 
-    public TextField withInfoMessage(String infoMessage) {
+    public Select withInfoMessage(String infoMessage) {
         this.infoMessage = infoMessage;
 
         return this;
     }
 
-    public TextField withErrorMessage(String errorMessage) {
+    public Select withErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
 
         return this;
     }
     
-    public TextField withDisabled(boolean disabled) {
+    public Select withDisabled(boolean disabled) {
         this.disabled = disabled;
+        
+        return this;
+    }
+    
+    public Select withItem(SelectItem item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+        
+        this.items.add(item);
+        
+        return this;
+    }
+    
+    public Select withItems(List<SelectItem> items) {
+        if (items == null) {
+            throw new NullPointerException();
+        }
+        
+        this.items.addAll(items);
         
         return this;
     }
@@ -87,15 +105,23 @@ public final class TextField extends AComponent {
         }
 
 //            <input type="password" id="inputPassword6" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
-        HtmlTag input = new HtmlTag("input");
+        HtmlTag input = new HtmlTag("select");
         res.withChildren(input);
-        input.withAttribute("id", this.getId() + "-input");
-        input.withAttribute("type", isPassword ? "password" : "text");
+        input.withAttribute("id", this.getId() + "-select");
         input.withAttribute("class", "form-control" + (this.errorMessage != null ? " is-invalid" : ""));
         input.withAttribute("style", "box-shadow: none;");
-        input.withAttribute("value", this.value);
         if (this.disabled) {
             input.withAttribute("disabled", "true");
+        }
+        
+        for (SelectItem item : items) {
+            HtmlTag opt = new HtmlTag("option");
+            opt.withAttribute("value", item.getId());
+            opt.withChildren(new HtmlText(item.getTitle()));
+            if (item.getId().equals(this.value)) {
+                opt.withAttribute("selected", "true");
+            }
+            input.withChildren(opt);
         }
 
         if (this.errorMessage != null) {
@@ -119,5 +145,5 @@ public final class TextField extends AComponent {
 
         return res;
     }
-
+    
 }

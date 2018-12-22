@@ -21,6 +21,8 @@ public abstract class ADialog extends AComponent {
     private final List<AComponent> children = new ArrayList<>();
     private final List<Button> actionButtons = new ArrayList<>();
     private String title;
+    private String infoText;
+    private String errorMessage;
     private boolean closeButtonVisible = false;
     private AFeAction closeButtonClickedAction;
 
@@ -56,6 +58,18 @@ public abstract class ADialog extends AComponent {
 
     protected ADialog onCloseButtonClickedAction(AFeAction action) {
         this.closeButtonClickedAction = action;
+
+        return this;
+    }
+
+    protected ADialog withInfoText(String infoText) {
+        this.infoText = infoText;
+
+        return this;
+    }
+
+    protected ADialog withErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
 
         return this;
     }
@@ -99,12 +113,16 @@ public abstract class ADialog extends AComponent {
             closeButton.withAttribute("class", "close");
             closeButton.withAttribute("data-dismiss", "modal");
             closeButton.withAttribute("aria-label", "Close");
+            
+            if (this.closeButtonClickedAction != null) {
+                closeButton.withAttribute("onClick", this.closeButtonClickedAction.toJavascript());
+            }
 
 //                    <span aria-hidden="true">&times;</span>
-        HtmlTag closeIcon = new HtmlTag("span");
-        closeButton.withChildren(closeIcon);
-        closeIcon.withAttribute("aria-hidden", "true");
-        closeIcon.withChildren(new HtmlText("&times;"));
+            HtmlTag closeIcon = new HtmlTag("span");
+            closeButton.withChildren(closeIcon);
+            closeIcon.withAttribute("aria-hidden", "true");
+            closeIcon.withChildren(new HtmlText("&times;"));
 //                  </button>
         }
 //                </div>
@@ -113,6 +131,20 @@ public abstract class ADialog extends AComponent {
         HtmlTag body = new HtmlTag("div");
         content.withChildren(body);
         body.withAttribute("class", "modal-body");
+
+        if (this.infoText != null) {
+            HtmlTag info = new HtmlTag("div");
+            info.withAttribute("style", "width: 100%; padding-bottom: 20px; font-size: 14px; color: #888; text-align: center;");
+            info.withChildren(new HtmlText(this.infoText));
+            body.withChildren(info);
+        }
+
+        if (this.errorMessage != null) {
+            HtmlTag error = new HtmlTag("div");
+            error.withAttribute("style", "width: 100%; padding-bottom: 20px; font-size: 14px; color: #c00; text-align: center;");
+            error.withChildren(new HtmlText(this.errorMessage));
+            body.withChildren(error);
+        }
 
         for (AComponent child : children) {
             body.withChildren(child.render());

@@ -6,16 +6,13 @@
 package com.el.whippi;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author david
  */
-public abstract class APage {
+public interface IAuthenticationProvider<$User> {
     
-    public abstract boolean match(String url, HttpServletRequest req);
-    
-    public abstract AController<?> createController(HttpServletRequest req, HttpServletResponse resp); 
+    public $User authenticate(HttpServletRequest request) throws RedirectException;
     
 }

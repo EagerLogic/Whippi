@@ -11,13 +11,10 @@ package com.el.whippi;
  */
 public class WhippiPostResponse {
     
+    private String title;
+    private String redirect;
     private String html;
     private Object model;
-
-    public WhippiPostResponse(String html, Object model) {
-        this.html = html;
-        this.model = model;
-    }
 
     public String getHtml() {
         return html;
@@ -33,6 +30,22 @@ public class WhippiPostResponse {
 
     public void setModel(Object model) {
         this.model = model;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
     }
     
 }
