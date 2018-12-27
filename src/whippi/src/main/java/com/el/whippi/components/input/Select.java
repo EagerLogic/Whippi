@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.el.whippi.components.select;
+package com.el.whippi.components.input;
 
 import com.el.whippi.components.AComponent;
 import com.el.whippi.feactions.FeValue;
@@ -29,7 +29,7 @@ public class Select extends AComponent {
     private final FeValue<String> feValue;
 
     public Select() {
-        this.feValue = new FeValue<>("document.getElementById('" + getId() + "-select').value");
+        this.feValue = new FeValue<>("document.getElementById('" + getId() + "-input').value");
     }
 
     public Select withLabel(String label) {
@@ -91,57 +91,48 @@ public class Select extends AComponent {
 
     @Override
     protected AHtmlElement onRender() {
-//        <div class="form-group">
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("class", "form-group");
+        res.withAttribute("class", "input-field");
+        res.withAttribute("style", "width: 100%; margin-bottom: 30px;");
 
-        if (this.label != null) {
-//            <label for="inputPassword6">Password</label>
-            HtmlTag label = new HtmlTag(this.label);
-            res.withChildren(label);
-            label.withAttribute("for", this.getId() + "-input");
-            label.withAttribute("class", "bmd-label-floating");
-            label.withChildren(new HtmlText(this.label));
-        }
-
-//            <input type="password" id="inputPassword6" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
         HtmlTag input = new HtmlTag("select");
-        res.withChildren(input);
-        input.withAttribute("id", this.getId() + "-select");
-        input.withAttribute("class", "form-control" + (this.errorMessage != null ? " is-invalid" : ""));
-        input.withAttribute("style", "box-shadow: none;");
+        res.withChild(input);
+        input.withAttribute("id", this.getId() + "-input");
+        input.withAttribute("class", this.errorMessage != null ? "invalid" : "");
         if (this.disabled) {
             input.withAttribute("disabled", "true");
         }
         
-        for (SelectItem item : items) {
+        for (SelectItem item : this.items) {
             HtmlTag opt = new HtmlTag("option");
             opt.withAttribute("value", item.getId());
-            opt.withChildren(new HtmlText(item.getTitle()));
+            opt.withChild(new HtmlText(item.getTitle()));
             if (item.getId().equals(this.value)) {
                 opt.withAttribute("selected", "true");
             }
-            input.withChildren(opt);
+            input.withChild(opt);
         }
 
-        if (this.errorMessage != null) {
-//            <div class="invalid-feedback">
-//                Please choose a username.
-//            </div>
-            HtmlTag error = new HtmlTag("div");
-            res.withChildren(error);
-            error.withAttribute("class", "invalid-feedback");
-            error.withChildren(new HtmlText(this.errorMessage));
-        } else if (this.infoMessage != null) {
-//            <small id="passwordHelpInline" class="text-muted">
-//                Must be 8-20 characters long.
-//            </small>
-            HtmlTag small = new HtmlTag("span");
-            res.withChildren(small);
-            small.withAttribute("class", "bmd-help");
-            small.withChildren(new HtmlText(this.infoMessage));
+        if (this.label != null) {
+            HtmlTag label = new HtmlTag("label");
+            res.withChild(label);
+            label.withAttribute("for", this.getId() + "-input");
+            label.withChild(new HtmlText(this.label));
+
         }
-//        </div>
+        
+        if (this.errorMessage != null) {
+            HtmlTag msg = new HtmlTag("span");
+            msg.withAttribute("class", "helper-text");
+            msg.withAttribute("style", "color: #f44336;");
+            msg.withChild(new HtmlText(this.errorMessage));
+            res.withChild(msg);
+        } else if (this.infoMessage != null) {
+            HtmlTag msg = new HtmlTag("span");
+            msg.withAttribute("class", "helper-text");
+            msg.withChild(new HtmlText(this.infoMessage));
+            res.withChild(msg);
+        }
 
         return res;
     }

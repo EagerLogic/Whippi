@@ -19,12 +19,11 @@ import java.util.List;
 public abstract class ADialog extends AComponent {
 
     private final List<AComponent> children = new ArrayList<>();
-    private final List<Button> actionButtons = new ArrayList<>();
+    private final List<AComponent> actionButtons = new ArrayList<>();
     private String title;
     private String infoText;
     private String errorMessage;
-    private boolean closeButtonVisible = false;
-    private AFeAction closeButtonClickedAction;
+    private AFeAction fadeClickedAction;
 
     public ADialog(String title) {
         this.title = title;
@@ -40,7 +39,7 @@ public abstract class ADialog extends AComponent {
         return this;
     }
 
-    protected ADialog withActionButton(Button button) {
+    protected ADialog withActionButton(AComponent button) {
         if (button == null) {
             throw new NullPointerException("The button parameter can not be null!");
         }
@@ -50,14 +49,8 @@ public abstract class ADialog extends AComponent {
         return this;
     }
 
-    protected ADialog withCloseButton(boolean closeButtonVisible) {
-        this.closeButtonVisible = closeButtonVisible;
-
-        return this;
-    }
-
-    protected ADialog onCloseButtonClickedAction(AFeAction action) {
-        this.closeButtonClickedAction = action;
+    protected ADialog onFadeClickedAction(AFeAction action) {
+        this.fadeClickedAction = action;
 
         return this;
     }
@@ -76,93 +69,87 @@ public abstract class ADialog extends AComponent {
 
     @Override
     protected final AHtmlElement onRender() {
-//        <div class="modal" tabindex="-1" role="dialog">
+//        <div style={this.createFadeStyle()} onClick={this.onFadeClicked}>
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("class", "modal");
-        res.withAttribute("tabindex", "-1");
-        res.withAttribute("role", "dialog");
-        res.withAttribute("style", "display: block;");
+        res.withAttribute("style", "position: fixed; background-color: rgba(0,0,0, 0.7); overflow: auto; left: 0px; top: 0px; right: 0px; bottom: 0px; z-index: 10000;");
+        if (this.fadeClickedAction != null) {
+            res.withAttribute("onclick", this.fadeClickedAction.toJavascript());
+        }
 
-//            <div class="modal-dialog" role="document">
+//                <div style={{ display: "table", width: "100%", minHeight: "100%" }}>
+        HtmlTag table = new HtmlTag("div");
+        table.withAttribute("style", "display: table; width: 100%; min-height: 100%;");
+        res.withChild(table);
+
+//                    <div style={{ display: "table-row", height: "40px" }}>
+        HtmlTag topRow = new HtmlTag("div");
+        topRow.withAttribute("style", "display: table-row; height: 40px;");
+        table.withChild(topRow);
+
+//                        <div style={{ display: "table-cell" }}>
+        topRow.withChild(new HtmlTag("div").withAttribute("style", "display: table-cell;"));
+
+//                    <div style={{ display: "table-row" }}>
+        HtmlTag middleRow = new HtmlTag("div");
+        middleRow.withAttribute("style", "display: table-row");
+        table.withChild(middleRow);
+
+//                        <div style={{ display: "table-cell", textAlign: "center", verticalAlign: "middle" }}>
+        HtmlTag middleCell = new HtmlTag("div")
+                .withAttribute("style", "display: table-cell; text-align: center; vertical-align: middle;");
+        middleRow.withChild(middleCell);
+
+//                            <div style={{ display: "inline-block" }}>
+        HtmlTag outerWrapper = new HtmlTag("div").withAttribute("style", "display: inline-block;");
+        middleCell.withChild(outerWrapper);
+
+//                                <div style={{ display: 'inline-block' }} onClick={(e) => {e.stopPropagation();}}>
+        HtmlTag innerWrapper = new HtmlTag("div").withAttribute("style", "display: inline-block").withAttribute("onclick", "event.stopPropagation();");
+        outerWrapper.withChild(innerWrapper);
+
         HtmlTag dialog = new HtmlTag("div");
-        res.withChildren(dialog);
-        dialog.withAttribute("class", "modal-dialog");
-        dialog.withAttribute("role", "document");
+        dialog.withAttribute("style", "width: 600px; padding: 20px; text-align: left; background-color: #fff; box-shadow: 1px 1px 10px rgba(0,0,0,0.5);");
+        innerWrapper.withChild(dialog);
 
-//              <div class="modal-content">
-        HtmlTag content = new HtmlTag("div");
-        dialog.withChildren(content);
-        content.withAttribute("class", "modal-content");
-
-//                <div class="modal-header">
-        HtmlTag header = new HtmlTag("div");
-        content.withChildren(header);
-        header.withAttribute("class", "modal-header");
-
-//                  <h5 class="modal-title">Modal title</h5>
-        HtmlTag title = new HtmlTag("h5");
-        header.withChildren(title);
-        title.withAttribute("class", "modal-title");
-        title.withChildren(new HtmlText(this.title));
-
-//                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        if (this.closeButtonVisible) {
-            HtmlTag closeButton = new HtmlTag("button");
-            header.withChildren(closeButton);
-            closeButton.withAttribute("type", "button");
-            closeButton.withAttribute("class", "close");
-            closeButton.withAttribute("data-dismiss", "modal");
-            closeButton.withAttribute("aria-label", "Close");
-            
-            if (this.closeButtonClickedAction != null) {
-                closeButton.withAttribute("onClick", this.closeButtonClickedAction.toJavascript());
-            }
-
-//                    <span aria-hidden="true">&times;</span>
-            HtmlTag closeIcon = new HtmlTag("span");
-            closeButton.withChildren(closeIcon);
-            closeIcon.withAttribute("aria-hidden", "true");
-            closeIcon.withChildren(new HtmlText("&times;"));
-//                  </button>
+        if (this.title != null) {
+            HtmlTag title = new HtmlTag("div").withAttribute("style", "font-size: 20px; font-weight: 600; color: #000; margin-bottom: 20px;");
+            title.withChild(new HtmlText(this.title));
+            dialog.withChild(title);
         }
-//                </div>
-
-//                <div class="modal-body">
-        HtmlTag body = new HtmlTag("div");
-        content.withChildren(body);
-        body.withAttribute("class", "modal-body");
-
+        
         if (this.infoText != null) {
-            HtmlTag info = new HtmlTag("div");
-            info.withAttribute("style", "width: 100%; padding-bottom: 20px; font-size: 14px; color: #888; text-align: center;");
-            info.withChildren(new HtmlText(this.infoText));
-            body.withChildren(info);
+            HtmlTag title = new HtmlTag("div").withAttribute("style", "font-size: 16px; text-align: center; color: #aaa; margin-bottom: 20px;");
+            title.withChild(new HtmlText(this.infoText));
+            dialog.withChild(title);
         }
-
+        
         if (this.errorMessage != null) {
-            HtmlTag error = new HtmlTag("div");
-            error.withAttribute("style", "width: 100%; padding-bottom: 20px; font-size: 14px; color: #c00; text-align: center;");
-            error.withChildren(new HtmlText(this.errorMessage));
-            body.withChildren(error);
+            HtmlTag title = new HtmlTag("div").withAttribute("style", "font-size: 16px; text-align: center; color: #f44336; margin-bottom: 20px;");
+            title.withChild(new HtmlText(this.errorMessage));
+            dialog.withChild(title);
+        }
+        
+        for (AComponent child : this.children) {
+            dialog.withChild(child.render());
+        }
+        
+        if (this.actionButtons.size() > 0) {
+            HtmlTag dialogFooter = new HtmlTag("div");
+            dialogFooter.withAttribute("style", "text-align: right; vertical-align: middle; padding-top: 40px;");
+            dialog.withChild(dialogFooter);
+            
+            for (AComponent c : this.actionButtons) {
+                dialogFooter.withChild(c.render());
+            }
         }
 
-        for (AComponent child : children) {
-            body.withChildren(child.render());
-        }
-//                </div>
+//                    <div style={{ display: "table-row", height: "40px" }}>
+        HtmlTag bottomRow = new HtmlTag("div").withAttribute("style", "display: table-row; height: 40px;");
+        table.withChild(bottomRow);
 
-//                <div class="modal-footer">
-        HtmlTag footer = new HtmlTag("div");
-        content.withChildren(footer);
-        footer.withAttribute("class", "modal-footer");
-
-        for (Button button : actionButtons) {
-            footer.withChildren(button.render());
-        }
-//                </div>
-//              </div>
-//            </div>
-//          </div>
+//                        <div style={{ display: "table-cell" }}>
+        HtmlTag bottomCell = new HtmlTag("div").withAttribute("style", "display: table-cell");
+        bottomRow.withChild(bottomCell);
 
         return res;
     }

@@ -40,19 +40,18 @@ public final class Table extends AComponent {
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("table");
-        res.withAttribute("class", "table");
         
         if (headLine != null) {
             HtmlTag thead = new HtmlTag("thead");
-            res.withChildren(thead);
+            res.withChild(thead);
             
-            thead.withChildren(headLine.render(true));
+            thead.withChild(headLine.render(true));
         }
         
         HtmlTag tbody = new HtmlTag("tbody");
-        res.withChildren(tbody);
+        res.withChild(tbody);
         for (Row row : rows) {
-            tbody.withChildren(row.render(false));
+            tbody.withChild(row.render(false));
         }
         
         return res;

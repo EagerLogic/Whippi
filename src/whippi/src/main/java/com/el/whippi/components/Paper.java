@@ -33,7 +33,7 @@ public final class Paper extends AComponent {
         return this;
     }
     
-    public Paper withChildren(AComponent child) {
+    public Paper withChild(AComponent child) {
         if (children == null) {
             throw new NullPointerException("The child parameter can not be null!");
         }
@@ -46,26 +46,24 @@ public final class Paper extends AComponent {
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("style", "width: 100%; padding: 20px; background-color: #fff; box-shadow: 1px 1px 5px rgba(0,0,0, 0.5); margin-bottom: 20px;");
+        res.withAttribute("style", "width: 100%; padding: 20px; background-color: #fff; box-shadow: 1px 1px 5px rgba(0,0,0, 0.5); margin-bottom: 40px;");
         
         if (this.title != null) {
-            res.withChildren(
-                    new HtmlTag("div")
-                    .withAttribute("style", "width: 100%; margin-bottom: 40px;font-size: 20px; color: #000; font-weight: 600;")
-                    .withChildren(new HtmlText(this.title))
+            res.withChild(new HtmlTag("div")
+                    .withAttribute("style", "width: 100%; margin-bottom: 40px; font-size: 20px; color: #000; font-weight: 600;")
+                    .withChild(new HtmlText(this.title))
             );
         }
         
         if (this.infoText != null) {
-            res.withChildren(
-                    new HtmlTag("div")
+            res.withChild(new HtmlTag("div")
                     .withAttribute("style", "width: 100%; margin-bottom: 20px; font-size: 16px; color: #aaa; text-align: center;")
-                    .withChildren(new HtmlText(infoText))
+                    .withChild(new HtmlText(infoText))
             );
         }
         
         for (AComponent child : children) {
-            res.withChildren(child.render());
+            res.withChild(child.render());
         }
         
         return res;

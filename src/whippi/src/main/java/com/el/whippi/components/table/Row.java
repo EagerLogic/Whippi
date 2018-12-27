@@ -32,7 +32,7 @@ public class Row {
         HtmlTag res = new HtmlTag("tr");
         
         for (Cell cell : cells) {
-            res.withChildren(cell.render(isHead ? "col" : null));
+            res.withChild(cell.render());
         }
         
         return res;

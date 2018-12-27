@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.el.whippi.components;
+package com.el.whippi.components.buttons;
 
+import com.el.whippi.components.AComponent;
+import com.el.whippi.components.EColor;
+import com.el.whippi.components.ESize;
 import com.el.whippi.feactions.AFeAction;
 import com.el.whippi.htmldom.AHtmlElement;
 import com.el.whippi.htmldom.HtmlTag;
@@ -19,7 +22,6 @@ public final class Button extends AComponent {
     private String text = "";
     private EColor color = EColor.PRIMARY;
     private ESize size = ESize.NORMAL;
-    private EButtonType type = EButtonType.RAISED;
     private AFeAction onClick;
     
     public Button() {
@@ -58,26 +60,23 @@ public final class Button extends AComponent {
         this.onClick = onClickAction;
         return this;
     }
-    
-    public Button withType(EButtonType type) {
-        if (type == null) {
-            type = EButtonType.RAISED;
-        }
-        this.type = type;
-        
-        return this;
-    }
 
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("button");
         
-        String classes = "btn " + this.type.getCssClass();
-        classes += " btn-" + this.color.getValue();
-        classes += " btn-" + this.size.getValue();
+        String classes = "waves-effect waves-light";
+        if (this.size == ESize.SMALL) {
+            classes += " btn-small";
+        } else if (this.size == ESize.SMALL) {
+            classes += " btn-large";
+        } else {
+            classes += " btn";
+        }
+        classes += " " + this.color.getStyleClass();
         
         res.withAttribute("class", classes);
-        res.withChildren(new HtmlText(text));
+        res.withChild(new HtmlText(text));
         
         if (this.onClick != null) {
             res.withAttribute("onClick", this.onClick.toJavascript());

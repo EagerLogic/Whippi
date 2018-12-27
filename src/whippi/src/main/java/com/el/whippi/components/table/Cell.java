@@ -60,18 +60,13 @@ public final class Cell {
         return this;
     }
 
-    public AHtmlElement render(String scope) {
+    public AHtmlElement render() {
         String element = "td";
         if (this.head) {
             element = "th";
         }
 
         HtmlTag res = new HtmlTag(element);
-        if (scope != null) {
-            res.withAttribute("scope", scope);
-        } else if (this.head) {
-            res.withAttribute("scope", "row");
-        }
 
         String style = "";
 
@@ -79,12 +74,12 @@ public final class Cell {
             style = style + "width: " + this.width + ";";
         }
 
-        style += "text-aligh: " + this.hAlign.getCssValue() + ";";
+        style += "text-align: " + this.hAlign.getCssValue() + ";";
         
         res.withAttribute("style", style);
 
         if (content != null) {
-            res.withChildren(content.render());
+            res.withChild(content.render());
         }
 
         return res;

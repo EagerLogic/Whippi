@@ -114,7 +114,10 @@ public class WhippiServlet extends HttpServlet {
             out.println("<head>");
             out.println("<title>" + controller.getTitle() + "</title>");
             out.println("<link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">");
-            out.println("<link rel=\"stylesheet\" href=\"https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css\" integrity=\"sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX\" crossorigin=\"anonymous\">");
+            out.println("<!-- Compiled and minified CSS -->\n"
+                    + "    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css\">\n"
+                    + "    <!-- Compiled and minified JavaScript -->\n"
+                    + "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js\"></script>");
             out.println("");
             out.println("");
             out.println("");
@@ -126,7 +129,6 @@ public class WhippiServlet extends HttpServlet {
 
             out.println("<style>");
             out.println("a:hover {text-decoration: none; opacity: 0.6;}");
-            out.println(".modal {background-color: rgba(0,0,0, 0.75);}");
             out.println("</style>");
 
             out.println("</head>");
@@ -134,11 +136,7 @@ public class WhippiServlet extends HttpServlet {
             out.println("<div id=\"whippiRoot\" style=\"width: 100%; height: 100%;\">");
             out.println(html);
             out.println("</div>");
-            out.println("<script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n"
-                    + "<script src=\"https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js\" integrity=\"sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U\" crossorigin=\"anonymous\"></script>\n"
-                    + "<script src=\"https://cdn.rawgit.com/FezVrasta/snackbarjs/1.1.0/dist/snackbar.min.js\"></script>\n"
-                    + "<script src=\"https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js\" integrity=\"sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9\" crossorigin=\"anonymous\"></script>\n"
-                    + "<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); Whippi.init(\"" + modelJson.replace("\"", "\\\"") + "\"); });</script>");
+            out.println("<script>window.onload = function () { Whippi.init(\"" + modelJson.replace("\"", "\\\"") + "\"); };</script>");
             out.println("</body>");
             out.println("</html>");
         }

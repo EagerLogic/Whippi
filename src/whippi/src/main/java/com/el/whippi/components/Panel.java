@@ -45,7 +45,7 @@ public class Panel extends AComponent {
         res.withAttribute("style", "width: 100%; padding-bottom: 20px; text-align: " + hAlign.getCssValue() + ";");
         
         for (AComponent child : this.children) {
-            res.withChildren(child.render());
+            res.withChild(child.render());
         }
         
         return res;

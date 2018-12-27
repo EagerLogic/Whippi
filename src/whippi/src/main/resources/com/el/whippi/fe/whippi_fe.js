@@ -8,6 +8,7 @@ window.Whippi = {
 
     init: function (modelStr) {
         Whippi.model = JSON.parse(modelStr).model;
+        Whippi.initMaterialize();
     },
 
     callBackendMethod: function (methodName, params) {
@@ -29,11 +30,11 @@ window.Whippi = {
                         window.location.href = resp.redirect;
                         return;
                     }
-                    
+
                     if (resp.title != null) {
                         document.title = resp.title;
                     }
-                    
+
                     Whippi.model = resp.model;
                     Whippi.render(resp.html);
                 } else {
@@ -46,7 +47,17 @@ window.Whippi = {
     render: function (html) {
         var root = document.getElementById("whippiRoot");
         root.innerHTML = html;
+
+        Whippi.initMaterialize();
         // TODO keep scroll bar positions
+    },
+
+    initMaterialize: function () {
+        M.AutoInit();
+        M.updateTextFields();
+
+        var elems = document.querySelectorAll('.datepicker');
+        var instances = M.Datepicker.init(elems, {format: "yyyy-mm-dd"});
     }
 
 };

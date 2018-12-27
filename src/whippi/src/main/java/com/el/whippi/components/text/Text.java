@@ -43,7 +43,7 @@ public class Text extends AComponent {
         res.withAttribute("style", "display: inline-block");
         
         if (text != null) {
-            res.withChildren(new HtmlText(text));
+            res.withChild(new HtmlText(text));
         }
         
         return res;

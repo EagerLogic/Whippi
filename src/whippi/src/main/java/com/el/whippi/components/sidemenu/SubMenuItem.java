@@ -41,18 +41,18 @@ public final class SubMenuItem extends AComponent {
         HtmlTag a = new HtmlTag("a");
         a.withAttribute("href", this.href);
         a.withAttribute("style", "display: flex; align-items: center; width: 100%;");
-        res.withChildren(a);
+        res.withChild(a);
         
         HtmlTag icon = new HtmlTag("div");
         icon.withAttribute("style", "display: inline-block; font-size: 10px; color: " + (this.selected ? "rgb(3, 169, 244)" : "#888") + ";");
         icon.withAttribute("class", "material-icons");
-        icon.withChildren(new HtmlText("trip_origin"));
-        a.withChildren(icon);
+        icon.withChild(new HtmlText("trip_origin"));
+        a.withChild(icon);
         
         HtmlTag title = new HtmlTag("div");
         title.withAttribute("style", "display: inline-block; padding-left: 10px; font-size: 16px; color: " + (this.selected ? "#fff" : "#888") + ";");
-        title.withChildren(new HtmlText(this.title));
-        a.withChildren(title);
+        title.withChild(new HtmlText(this.title));
+        a.withChild(title);
         
         return res;
     }

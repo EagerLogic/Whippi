@@ -11,21 +11,30 @@ package com.el.whippi.components;
  */
 public enum EColor {
     
-    PRIMARY("primary"),
-    SECONDARY("secondary"),
-    INFO("info"),
-    SUCCESS("success"),
-    WARNING("warning"),
-    DANGER("danger");
+    PRIMARY("teal lighten-1", "#26a69a"),
+    SECONDARY("pink lighten-1", "#ec407a"),
+    INFO("light-blue lighten-1", "#29b6f6"),
+    SUCCESS("light-green darken-1", "#7cb342"),
+    WARNING("orange darken-3", "#ef6c00"),
+    DANGER("red darken-3", "#c62828"),
+    BLACK("grey darken-4", "#212121"),
+    GRAY("grey lighten-1", "#bdbdbd"),
+    WHITE("white", "#ffffff");
     
-    private final String value;
+    private final String styleClass;
+    private final String color;
     
-    private EColor(String value) {
-        this.value = value;
+    private EColor(String styleClass, String color) {
+        this.styleClass = styleClass;
+        this.color = color;
     }
     
-    public String getValue() {
-        return this.value;
+    public String getStyleClass() {
+        return this.styleClass;
+    }
+
+    public String getColor() {
+        return color;
     }
     
 }

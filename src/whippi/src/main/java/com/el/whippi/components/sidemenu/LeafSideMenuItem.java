@@ -34,18 +34,18 @@ public final class LeafSideMenuItem extends ASideMenuItem {
         HtmlTag a = new HtmlTag("a");
         a.withAttribute("href", this.href);
         a.withAttribute("style", "padding: 10px 20px 10px 20px; cursor: pointer; display: flex; align-items: center;");
-        res.withChildren(a);
+        res.withChild(a);
         
         HtmlTag icon = new HtmlTag("div");
-        a.withChildren(icon);
+        a.withChild(icon);
         icon.withAttribute("style", "display: inline-block; padding-right: 20px; color: #ddd;");
         icon.withAttribute("class", "material-icons");
-        icon.withChildren(new HtmlText(this.getIcon()));
+        icon.withChild(new HtmlText(this.getIcon()));
         
         HtmlTag title = new HtmlTag("div");
-        a.withChildren(title);
+        a.withChild(title);
         title.withAttribute("style", "display: inline-block; size: 18px, font-weight: 600; color: #ddd;");
-        title.withChildren(new HtmlText(this.getTitle()));
+        title.withChild(new HtmlText(this.getTitle()));
         
         return res;
     }

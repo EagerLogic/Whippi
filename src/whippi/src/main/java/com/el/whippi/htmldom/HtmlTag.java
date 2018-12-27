@@ -45,7 +45,7 @@ public final class HtmlTag extends AHtmlElement {
         return this;
     }
     
-    public HtmlTag withChildren(AHtmlElement child) {
+    public HtmlTag withChild(AHtmlElement child) {
         if (child == null) {
             throw new NullPointerException("The child property can not be null!");
         }

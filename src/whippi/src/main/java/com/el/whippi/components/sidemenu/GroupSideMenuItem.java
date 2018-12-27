@@ -49,32 +49,32 @@ public final class GroupSideMenuItem extends ASideMenuItem {
         
         HtmlTag mainContainer = new HtmlTag("div");
         mainContainer.withAttribute("style", "width: 100%; ");
-        res.withChildren(mainContainer);
+        res.withChild(mainContainer);
         
         HtmlTag a = new HtmlTag("a");
         a.withAttribute("href", firstHref);
         a.withAttribute("style", "padding: 10px 20px 10px 0px; cursor: pointer; "
                 + "display: flex; align-items: center;");
-        mainContainer.withChildren(a);
+        mainContainer.withChild(a);
         
         HtmlTag icon = new HtmlTag("div");
-        a.withChildren(icon);
+        a.withChild(icon);
         icon.withAttribute("style", "display: inline-block; padding-right: 20px; padding-left: 15px; color: #ddd;");
         icon.withAttribute("class", "material-icons");
-        icon.withChildren(new HtmlText(this.getIcon()));
+        icon.withChild(new HtmlText(this.getIcon()));
         
         HtmlTag title = new HtmlTag("div");
-        a.withChildren(title);
+        a.withChild(title);
         title.withAttribute("style", "display: inline-block; size: 18px, font-weight: 600; color: #ddd;");
-        title.withChildren(new HtmlText(this.getTitle()));
+        title.withChild(new HtmlText(this.getTitle()));
         
         if (this.isSelected() && this.items.size() > 0) {
             HtmlTag subContainer = new HtmlTag("div");
             subContainer.withAttribute("style", "padding: 20px 20px 20px 35px; background-color: #303234; width: 100%;");
-            res.withChildren(subContainer);
+            res.withChild(subContainer);
             
             for (SubMenuItem item : items) {
-                subContainer.withChildren(item.render());
+                subContainer.withChild(item.render());
             }
         }
         

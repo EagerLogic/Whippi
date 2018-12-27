@@ -55,7 +55,7 @@ public final class DefaultPageLayout extends APageLayout {
         res.withChildren(container);
         
         for (AComponent child : content) {
-            container.withChildren(child.render());
+            container.withChild(child.render());
         }
         
         return res;

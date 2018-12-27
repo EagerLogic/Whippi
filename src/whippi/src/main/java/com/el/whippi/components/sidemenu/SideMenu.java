@@ -35,12 +35,12 @@ public final class SideMenu extends AComponent {
         res.withAttribute("style", "width: 300px; background-color: #404244; position: fixed; left: 0px; top: 0px; bottom: 0px; padding-top: 80px;");
         
         if (menuItems.size() > 0) {
-            res.withChildren(renderDivider());
+            res.withChild(renderDivider());
         }
         
         for (ASideMenuItem item : menuItems) {
-            res.withChildren(item.render());
-            res.withChildren(renderDivider());
+            res.withChild(item.render());
+            res.withChild(renderDivider());
         }
         
         return res;
