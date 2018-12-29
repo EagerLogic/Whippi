@@ -20,6 +20,7 @@ public class Icon extends AComponent {
     private int size = 20;
     private AFeAction onClick;
     private EColor color = EColor.BLACK;
+    private String tooltip;
 
     public Icon(String icon) {
         if (icon == null) {
@@ -53,6 +54,12 @@ public class Icon extends AComponent {
         
         return this;
     }
+    
+    public Icon withTooltip(String tooltip) {
+        this.tooltip = tooltip;
+        
+        return this;
+    }
 
     @Override
     protected AHtmlElement onRender() {
@@ -66,6 +73,10 @@ public class Icon extends AComponent {
             style += " cursor: pointer;";
         }
         res.withAttribute("style", style);
+        
+        if (this.tooltip != null) {
+            res.withAttribute("title", this.tooltip);
+        }
         
         if (this.onClick != null) {
             res.withAttribute("onclick", this.onClick.toJavascript());

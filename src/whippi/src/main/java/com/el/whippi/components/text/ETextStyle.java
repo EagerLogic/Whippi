@@ -11,27 +11,22 @@ package com.el.whippi.components.text;
  */
 public enum ETextStyle {
     
-    BODY(""),
+    BODY("p"),
     H1("h1"),
     H2("h2"),
     H3("h3"),
     H4("h4"),
     H5("h5"),
-    H6("h6"),
-    DISPLAY1("display-1"),
-    DISPLAY2("display-2"),
-    DISPLAY3("display-3"),
-    DISPLAY4("display-4"),
-    LEAD("lead");
+    H6("h6");
     
-    private final String cssStyle;
+    private final String tag;
     
-    private ETextStyle(String cssStyle) {
-        this.cssStyle = cssStyle;
+    private ETextStyle(String tag) {
+        this.tag = tag;
     }
 
-    public String getCssStyle() {
-        return cssStyle;
+    public String getTag() {
+        return tag;
     }
     
 }

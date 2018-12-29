@@ -38,9 +38,7 @@ public class Text extends AComponent {
 
     @Override
     protected AHtmlElement onRender() {
-        HtmlTag res = new HtmlTag("div");
-        res.withAttribute("class", textStyle.getCssStyle());
-        res.withAttribute("style", "display: inline-block");
+        HtmlTag res = new HtmlTag(textStyle.getTag());
         
         if (text != null) {
             res.withChild(new HtmlText(text));

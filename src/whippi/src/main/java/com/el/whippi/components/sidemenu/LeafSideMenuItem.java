@@ -16,7 +16,7 @@ import com.el.whippi.htmldom.HtmlText;
 public final class LeafSideMenuItem extends ASideMenuItem {
     
     private static final String NORMAL_BACKGROUND = "rgba(0,0,0, 0.0)";
-    private static final String SELECTED_BACKGROUND = "rgb(3, 169, 244)";
+    private static final String SELECTED_BACKGROUND = "rgba(0,0,0, 0.0)";
     
     private final String href;
 
@@ -38,13 +38,13 @@ public final class LeafSideMenuItem extends ASideMenuItem {
         
         HtmlTag icon = new HtmlTag("div");
         a.withChild(icon);
-        icon.withAttribute("style", "display: inline-block; padding-right: 20px; color: #ddd;");
+        icon.withAttribute("style", "display: inline-block; padding-right: 20px; color: " + (this.isSelected() ? "rgb(3, 169, 244)" : "rgba(255, 255, 255, 0.4)") + ";");
         icon.withAttribute("class", "material-icons");
         icon.withChild(new HtmlText(this.getIcon()));
         
         HtmlTag title = new HtmlTag("div");
         a.withChild(title);
-        title.withAttribute("style", "display: inline-block; size: 18px, font-weight: 600; color: #ddd;");
+        title.withAttribute("style", "display: inline-block; size: 18px, font-weight: 600; color: " + (this.isSelected() ? "rgb(3, 169, 244)" : "rgba(255, 255, 255, 0.75)") + ";");
         title.withChild(new HtmlText(this.getTitle()));
         
         return res;
