@@ -14,8 +14,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class APage {
     
+    private String header;
+    
     public abstract boolean match(String url, HttpServletRequest req);
     
-    public abstract AController<?> createController(HttpServletRequest req, HttpServletResponse resp); 
+    public abstract AController<?> createController(HttpServletRequest req, HttpServletResponse resp);
+    
+    public void setHeader(String header) {
+        this.header = header;
+    }
+    
+    public String getHeader() {
+        return this.header;
+    }
+    
+    
     
 }

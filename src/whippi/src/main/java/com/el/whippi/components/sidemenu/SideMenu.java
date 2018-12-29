@@ -55,7 +55,7 @@ public final class SideMenu extends AComponent {
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("style", "width: 300px; background-color: #2F3C4F; position: fixed; left: 0px; top: 0px; bottom: 0px;");
+        res.withAttribute("style", "width: 300px; background-color: #2F3C4F; position: fixed; left: 0px; top: 0px; bottom: 0px; box-shadow: 1px 1px 10px rgba(0,0,0, 0.5);");
         
         HtmlTag container = new HtmlTag("div");
         container.withAttribute("style", "display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%;");

@@ -105,6 +105,8 @@ public class WhippiServlet extends HttpServlet {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE, JsonTypeInfo.As.PROPERTY);
         String modelJson = mapper.writeValueAsString(responseModel);
+        
+        String extraHeader = page.getHeader();
 
         resp.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {
@@ -112,6 +114,9 @@ public class WhippiServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html style=\"width: 100%; height: 100%;\">");
             out.println("<head>");
+            if (extraHeader != null) {
+                out.println(extraHeader);
+            }
             out.println("<title>" + controller.getTitle() + "</title>");
             out.println("<link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">");
             out.println("<!-- Compiled and minified CSS -->\n"

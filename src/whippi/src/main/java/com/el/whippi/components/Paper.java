@@ -46,7 +46,7 @@ public final class Paper extends AComponent {
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("style", "width: 100%; padding: 20px; background-color: #fff; box-shadow: 1px 1px 5px rgba(0,0,0, 0.5); margin-bottom: 40px;");
+        res.withAttribute("style", "width: 100%; padding: 20px; background-color: #fff; box-shadow: 1px 1px 10px rgba(0,0,0, 0.3); margin-bottom: 40px;");
         
         if (this.title != null) {
             res.withChild(new HtmlTag("div")
