@@ -118,6 +118,8 @@ public class WhippiServlet extends HttpServlet {
                 out.println(extraHeader);
             }
             out.println("<title>" + controller.getTitle() + "</title>");
+            out.println("<link rel=\"shortcut icon\" type=\"image/png\" href=\"/favicon.png\"/>\n" +
+"        <link rel=\"shortcut icon\" type=\"image/png\" href=\"https://humen.io/favicon.png\"/>");
             out.println("<link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">");
             out.println("<!-- Compiled and minified CSS -->\n"
                     + "    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css\">\n"
@@ -138,6 +140,10 @@ public class WhippiServlet extends HttpServlet {
 
             out.println("</head>");
             out.println("<body style=\"width: 100%; height: 100%;\">");
+            
+            out.println("<div id=\"whippi-progress\" class=\"progress\" style=\"display: none; position: fixed; left: 0px; right: 0px; margin: 0px;\">\n" +
+                    "<div class=\"indeterminate\"></div>\n" +
+                    "</div>");
             out.println("<div id=\"whippiRoot\" style=\"width: 100%; height: 100%;\">");
             out.println(html);
             out.println("</div>");

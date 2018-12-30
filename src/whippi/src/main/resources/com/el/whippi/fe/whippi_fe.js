@@ -17,6 +17,8 @@ window.Whippi = {
         data.params = params;
         data.model = Whippi.model;
         data.title = document.title;
+        
+        Whippi.showProgress(true);
 
         var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
         xmlhttp.open("POST", window.location.href);
@@ -24,6 +26,7 @@ window.Whippi = {
         xmlhttp.send(JSON.stringify(data));
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4) {
+                Whippi.showProgress(false);
                 if (xmlhttp.status == 200) {
                     var resp = JSON.parse(xmlhttp.responseText);
                     if (resp.redirect != null) {
@@ -41,6 +44,15 @@ window.Whippi = {
                     console.error("Network request failed!");
                 }
             }
+        }
+    },
+    
+    showProgress: function (visible) {
+        var e = document.getElementById("whippi-progress");
+        if (visible) {
+            e.style.display = "block";
+        } else {
+            e.style.display = "none";
         }
     },
 
