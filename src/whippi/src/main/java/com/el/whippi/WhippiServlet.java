@@ -142,7 +142,7 @@ public class WhippiServlet extends HttpServlet {
                 out.println("</head>");
                 out.println("<body style=\"width: 100%; height: 100%;\">");
 
-                out.println("<div id=\"whippi-progress\" class=\"progress\" style=\"display: none; position: fixed; left: 0px; right: 0px; margin: 0px;\">\n"
+                out.println("<div id=\"whippi-progress\" class=\"progress\" style=\"display: none; position: fixed; left: 0px; right: 0px; margin: 0px; z-index: 12000\">\n"
                         + "<div class=\"indeterminate\"></div>\n"
                         + "</div>");
                 out.println("<div id=\"whippiRoot\" style=\"width: 100%; height: 100%;\">");
