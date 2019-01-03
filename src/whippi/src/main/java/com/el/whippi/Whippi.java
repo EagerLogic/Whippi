@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 public class Whippi {
     
     private static final List<APage> pages = new ArrayList<>();
+    private static IUncaughtExceptionHandler uncaughtExceptionHandler;
     
     public static void registerPage(APage page) {
         if (page == null) {
@@ -31,6 +32,14 @@ public class Whippi {
             }
         }
         return null;
+    }
+
+    public static IUncaughtExceptionHandler getUncaughtExceptionHandler() {
+        return uncaughtExceptionHandler;
+    }
+
+    public static void setUncaughtExceptionHandler(IUncaughtExceptionHandler uncaughtExceptionHandler) {
+        Whippi.uncaughtExceptionHandler = uncaughtExceptionHandler;
     }
     
     private Whippi() {}
