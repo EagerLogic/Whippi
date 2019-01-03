@@ -6,6 +6,7 @@
 package com.el.whippi.components.input;
 
 import com.el.whippi.components.AComponent;
+import com.el.whippi.feactions.AFeAction;
 import com.el.whippi.feactions.FeValue;
 import com.el.whippi.htmldom.AHtmlElement;
 import com.el.whippi.htmldom.HtmlTag;
@@ -22,6 +23,8 @@ public class CheckBox extends AComponent {
     private String infoMessage;
     private String errorMessage;
     private boolean disabled = false;
+    
+    private AFeAction onClick;
 
     private final FeValue<Boolean> feChecked;
 
@@ -58,6 +61,12 @@ public class CheckBox extends AComponent {
 
         return this;
     }
+    
+    public CheckBox withOnClick(AFeAction onClick) {
+        this.onClick = onClick;
+        
+        return this;
+    }
 
     public FeValue<Boolean> getFeChecked() {
         return this.feChecked;
@@ -86,6 +95,9 @@ public class CheckBox extends AComponent {
         }
         if (this.disabled) {
             input.withAttribute("disabled", "true");
+        }
+        if (this.onClick != null) {
+            input.withAttribute("onclick", this.onClick.toJavascript());
         }
 
         if (this.label != null) {
