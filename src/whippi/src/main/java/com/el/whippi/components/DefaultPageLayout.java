@@ -21,6 +21,10 @@ public final class DefaultPageLayout extends APageLayout {
     private SideMenu sideMenu;
     private final List<AComponent> content = new ArrayList<>();
     
+    private int hPadding = 80;
+    private int vPadding = 40;
+    private String bgColor = null;
+    
     public DefaultPageLayout withSideMenu(SideMenu sideMenu) {
         this.sideMenu = sideMenu;
         
@@ -36,6 +40,32 @@ public final class DefaultPageLayout extends APageLayout {
         
         return this;
     }
+    
+    public DefaultPageLayout withHPadding(int hPadding) {
+        if (hPadding < 0) {
+            hPadding = 0;
+        }
+        
+        this.hPadding = hPadding;
+        
+        return this;
+    }
+    
+    public DefaultPageLayout withVPadding(int vPadding) {
+        if (vPadding < 0) {
+            vPadding = 0;
+        }
+        
+        this.vPadding = vPadding;
+        
+        return this;
+    }
+    
+    public DefaultPageLayout withBgColor(String color) {
+        this.bgColor = color;
+        
+        return this;
+    }
 
     @Override
     protected AHtmlElement onRender() {
@@ -45,13 +75,18 @@ public final class DefaultPageLayout extends APageLayout {
             res.withChildren(this.sideMenu.render());
         }
         
-        int paddingLeft = 80;
+        int paddingLeft = hPadding;
         if (this.sideMenu != null) {
-            paddingLeft = 380;
+            paddingLeft = hPadding + 300;
+        }
+        
+        String bg = bgColor;
+        if (bg == null) {
+            bg = "#f4f4f4";
         }
         
         HtmlTag container = new HtmlTag("div");
-        container.withAttribute("style", "padding: 40px 80px 40px " + paddingLeft + "px; width: 100%; min-height: 100%; background-color: #f4f4f4;");
+        container.withAttribute("style", "padding: " + vPadding + "px " + hPadding + "px " + vPadding + "px " + paddingLeft + "px; width: 100%; min-width: 1280px; min-height: 100%; background-color: " + bg + ";");
         res.withChildren(container);
         
         for (AComponent child : content) {
