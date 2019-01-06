@@ -127,8 +127,7 @@ public class WhippiServlet extends HttpServlet {
                         + "    <!-- Compiled and minified JavaScript -->\n"
                         + "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js\"></script>");
                 out.println("");
-                out.println("");
-                out.println("");
+                out.println("<meta name=\"viewport\" content=\"width=1280\">");
                 out.println("<script>");
                 out.println("//<![CDATA[");
                 out.println(feJs);
