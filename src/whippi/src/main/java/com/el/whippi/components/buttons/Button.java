@@ -23,6 +23,8 @@ public final class Button extends AComponent {
     private EColor color = EColor.PRIMARY;
     private ESize size = ESize.NORMAL;
     private AFeAction onClick;
+    private String href = null;
+    private boolean inNewTab = false;
     
     public Button() {
         
@@ -60,10 +62,22 @@ public final class Button extends AComponent {
         this.onClick = onClickAction;
         return this;
     }
+    
+    public Button withHref(String href) {
+        this.href = href;
+        
+        return this;
+    }
+    
+    public Button withInNewTab(boolean inNewTab) {
+        this.inNewTab = inNewTab;
+        
+        return this;
+    }
 
     @Override
     protected AHtmlElement onRender() {
-        HtmlTag res = new HtmlTag("button");
+        HtmlTag res = new HtmlTag(this.href == null ? "button" : "a");
         
         String classes = "waves-effect waves-light";
         if (this.size == ESize.SMALL) {
@@ -76,6 +90,14 @@ public final class Button extends AComponent {
         classes += " " + this.color.getStyleClass();
         
         res.withAttribute("class", classes);
+        
+        if (this.href != null) {
+            res.withAttribute("href", this.href);
+            if (this.inNewTab) {
+                res.withAttribute("target", "_blank");
+            }
+        }
+        
         res.withChild(new HtmlText(text));
         
         if (this.onClick != null) {
