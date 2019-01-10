@@ -17,7 +17,7 @@ window.Whippi = {
         data.params = params;
         data.model = Whippi.model;
         data.title = document.title;
-        
+
         Whippi.showProgress(true);
 
         var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
@@ -45,8 +45,17 @@ window.Whippi = {
                 }
             }
         }
+
+        let page = window.location.pathname;
+        if (window.location.search) {
+            page += window.location.search;
+        }
+        page += ' - ' + methodName;
+        if (ga) {
+            ga('send', 'pageview', page);
+        }
     },
-    
+
     showProgress: function (visible) {
         var e = document.getElementById("whippi-progress");
         if (visible) {
