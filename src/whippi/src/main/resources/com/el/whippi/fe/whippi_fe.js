@@ -79,6 +79,24 @@ window.Whippi = {
 
         var elems = document.querySelectorAll('.datepicker');
         var instances = M.Datepicker.init(elems, {format: "yyyy-mm-dd"});
+    },
+
+    storeFileUpload: function (event) {
+        var id = event.srcElement.id;
+        window['fileValue_' + id.replace('-', '_')] = null;
+        if (event.srcElement.files.length < 1) {
+            return;
+        }
+        var file = event.srcElement.files[0];
+        var reader = new FileReader();
+        reader.readAsBinaryString(file);
+
+        reader.onload = function () {
+            window['fileValue_' + id.replace('-', '_')] = btoa(reader.result);
+        };
+        reader.onerror = function () {
+            console.log('uploadError');
+        };
     }
 
 };

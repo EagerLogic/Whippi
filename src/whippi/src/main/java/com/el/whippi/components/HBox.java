@@ -31,7 +31,7 @@ public class HBox extends AComponent {
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("style", "display: flex; align-items: center;");
+        res.withAttribute("style", "display: flex; width: 100%; align-items: center;");
         
         for (AComponent child : children) {
             res.withChild(child.render());

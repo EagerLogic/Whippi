@@ -110,6 +110,12 @@ public class WhippiServlet extends HttpServlet {
             String extraHeader = page.getHeader();
 
             resp.setContentType("text/html;charset=UTF-8");
+            
+            resp.setHeader("X-Frame-Options", "deny");
+            resp.setHeader("X-XSS-Protection", "1");
+            resp.setHeader("Strict-Transport-Security", "max-age=31536000");
+            resp.setHeader("X-Content-Type-Options", "nosniff");
+            
             try (PrintWriter out = resp.getWriter()) {
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<!DOCTYPE html>");
@@ -145,7 +151,7 @@ public class WhippiServlet extends HttpServlet {
                         + "    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css\">\n"
                         + "    <!-- Compiled and minified JavaScript -->\n"
                         + "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js\"></script>");
-                out.println("");
+                out.println("<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800\" rel=\"stylesheet\">");
                 out.println("<meta name=\"viewport\" content=\"width=1280\">");
                 out.println("<script>");
                 out.println("//<![CDATA[");
@@ -155,6 +161,7 @@ public class WhippiServlet extends HttpServlet {
 
                 out.println("<style>");
                 out.println("a:hover {text-decoration: none; opacity: 0.6;}");
+                out.println("* {font-family: 'Open Sans', sans-serif;}");
                 out.println("</style>");
 
                 out.println("</head>");
@@ -269,6 +276,12 @@ public class WhippiServlet extends HttpServlet {
             String responseJson = mapper.writeValueAsString(respData);
 
             resp.setContentType("text/json;charset=UTF-8");
+            
+            resp.setHeader("X-Frame-Options", "deny");
+            resp.setHeader("X-XSS-Protection", "1");
+            resp.setHeader("Strict-Transport-Security", "max-age=31536000");
+            resp.setHeader("X-Content-Type-Options", "nosniff");
+            
             try (PrintWriter out = resp.getWriter()) {
                 /* TODO output your page here. You may use following sample code. */
                 out.println(responseJson);

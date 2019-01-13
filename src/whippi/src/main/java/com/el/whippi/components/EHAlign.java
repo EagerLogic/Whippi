@@ -11,18 +11,24 @@ package com.el.whippi.components;
  */
 public enum EHAlign {
 
-    LEFT("left"),
-    CENTER("center"),
-    RIGHT("right");
+    LEFT("left", "flex-start"),
+    CENTER("center", "center"),
+    RIGHT("right", "flex-end");
 
     private final String cssValue;
+    private final String flexValue;
 
-    private EHAlign(String cssValue) {
+    private EHAlign(String cssValue, String flexValue) {
         this.cssValue = cssValue;
+        this.flexValue = flexValue;
     }
 
     public String getCssValue() {
         return cssValue;
+    }
+
+    public String getFlexValue() {
+        return flexValue;
     }
 
 }

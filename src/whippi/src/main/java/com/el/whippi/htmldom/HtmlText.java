@@ -12,17 +12,27 @@ package com.el.whippi.htmldom;
 public final class HtmlText extends AHtmlElement {
     
     private final String text;
+    private final boolean escape;
 
     public HtmlText(String text) {
+        this(text, true);
+    }
+
+    public HtmlText(String text, boolean escape) {
         if (text == null) {
             text = "";
         }
         this.text = text;
+        this.escape = escape;
     }
 
     @Override
     public void render(StringBuilder sb) {
-        sb.append(this.escapeHtmlText(this.text)).append("\n");
+        String t = this.text;
+        if (this.escape) {
+            t = escapeHtmlText(t);
+        }
+        sb.append(t).append("\n");
     }
     
 }

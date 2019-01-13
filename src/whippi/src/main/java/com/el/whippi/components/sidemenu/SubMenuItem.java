@@ -6,6 +6,7 @@
 package com.el.whippi.components.sidemenu;
 
 import com.el.whippi.components.AComponent;
+import com.el.whippi.components.EColor;
 import com.el.whippi.htmldom.AHtmlElement;
 import com.el.whippi.htmldom.HtmlTag;
 import com.el.whippi.htmldom.HtmlText;
@@ -44,13 +45,13 @@ public final class SubMenuItem extends AComponent {
         res.withChild(a);
         
         HtmlTag icon = new HtmlTag("div");
-        icon.withAttribute("style", "display: inline-block; font-size: 10px; color: " + (this.selected ? "rgb(3, 169, 244)" : "rgba(255, 255, 255, 0.4)") + ";");
+        icon.withAttribute("style", "display: inline-block; font-size: 10px; color: " + (this.selected ? EColor.WARNING.getColor() : "rgba(255, 255, 255, 0.4)") + ";");
         icon.withAttribute("class", "material-icons");
         icon.withChild(new HtmlText("trip_origin"));
         a.withChild(icon);
         
         HtmlTag title = new HtmlTag("div");
-        title.withAttribute("style", "display: inline-block; padding-left: 10px; font-size: 16px; color: " + (this.selected ? "rgb(3, 169, 244)" : "rgba(255, 255, 255, 0.75)") + ";");
+        title.withAttribute("style", "display: inline-block; padding-left: 10px; font-size: 16px; color: " + (this.selected ? EColor.WARNING.getColor() : "rgba(255, 255, 255, 0.75)") + ";");
         title.withChild(new HtmlText(this.title));
         a.withChild(title);
         

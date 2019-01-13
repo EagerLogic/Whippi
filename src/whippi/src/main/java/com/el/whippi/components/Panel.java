@@ -18,6 +18,8 @@ public class Panel extends AComponent {
     
     private EHAlign hAlign = EHAlign.LEFT;
     private final List<AComponent> children = new ArrayList<>();
+    private int padding = 0;
+    private String width = "100%";
     
     public Panel withHAlign(EHAlign hAlign) {
         if (hAlign == null) {
@@ -38,11 +40,31 @@ public class Panel extends AComponent {
         
         return this;
     }
+    
+    public Panel withPadding(int padding) {
+        if (padding < 0) {
+            padding = 0;
+        }
+        
+        this.padding = padding;
+        
+        return this;
+    }
+    
+    public Panel withWidth(String width) {
+        if (width == null) {
+            width = "100%";
+        }
+        
+        this.width = width;
+        
+        return this;
+    }
 
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("style", "width: 100%; padding-bottom: 20px; text-align: " + hAlign.getCssValue() + ";");
+        res.withAttribute("style", "display: flex; flex-direction: column; width: " + this.width + "; padding-bottom: " + padding + "px; align-items: " + hAlign.getFlexValue() + ";");
         
         for (AComponent child : this.children) {
             res.withChild(child.render());

@@ -20,6 +20,7 @@ public final class Paper extends AComponent {
     private String title;
     private String infoText;
     private final List<AComponent> children = new ArrayList<>();
+    private String width = "100%";
     
     public Paper withTitle(String title) {
         this.title = title;
@@ -42,11 +43,20 @@ public final class Paper extends AComponent {
         
         return this;
     }
+    
+    public Paper withWidth(String width) {
+        if (width == null) {
+            width = "100%";
+        }
+        this.width = width;
+        
+        return this;
+    }
 
     @Override
     protected AHtmlElement onRender() {
         HtmlTag res = new HtmlTag("div");
-        res.withAttribute("style", "width: 100%; padding: 20px; background-color: #fff; box-shadow: 1px 1px 10px rgba(0,0,0, 0.3); margin-bottom: 40px;");
+        res.withAttribute("style", "width: " + width + "; padding: 20px; background-color: #fff; box-shadow: 1px 1px 10px rgba(0,0,0, 0.3); margin-bottom: 40px;");
         
         if (this.title != null) {
             res.withChild(new HtmlTag("div")

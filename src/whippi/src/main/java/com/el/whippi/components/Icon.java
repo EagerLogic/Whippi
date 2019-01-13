@@ -19,7 +19,7 @@ public class Icon extends AComponent {
     private final String icon;
     private int size = 20;
     private AFeAction onClick;
-    private EColor color = EColor.BLACK;
+    private String color = "#000";
     private String tooltip;
 
     public Icon(String icon) {
@@ -45,9 +45,9 @@ public class Icon extends AComponent {
         return this;
     }
     
-    public Icon withColor(EColor color) {
+    public Icon withColor(String color) {
         if (color == null) {
-            color = EColor.BLACK;
+            color = "#000";
         }
         
         this.color = color;
@@ -67,7 +67,7 @@ public class Icon extends AComponent {
         res.withAttribute("class", "material-icons");
         String style = "display: inline-block;";
         style += " padding: 3px;";
-        style += " color: " + this.color.getColor() + ";";
+        style += " color: " + this.color + ";";
         style += " font-size: " + this.size + "px;";
         if (this.onClick != null) {
             style += " cursor: pointer;";

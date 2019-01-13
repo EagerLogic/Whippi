@@ -9,24 +9,22 @@ package com.el.whippi.components.text;
  *
  * @author david
  */
-public enum ETextStyle {
+public enum EFontWeight {
     
-    BODY("p"),
-    H1("h1"),
-    H2("h2"),
-    H3("h3"),
-    H4("h4"),
-    H5("h5"),
-    H6("h6");
+    LIGHT(300),
+    NORMAL(400),
+    SEMI_BOLD(600),
+    BOLD(700),
+    EXTRA_BOLD(800);
     
-    private final String tag;
-    
-    private ETextStyle(String tag) {
-        this.tag = tag;
+    private final int weight;
+
+    private EFontWeight(int weight) {
+        this.weight = weight;
     }
 
-    public String getTag() {
-        return tag;
+    public int getWeight() {
+        return weight;
     }
     
 }

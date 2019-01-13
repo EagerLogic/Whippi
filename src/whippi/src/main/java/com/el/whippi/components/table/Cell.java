@@ -7,8 +7,10 @@ package com.el.whippi.components.table;
 
 import com.el.whippi.components.AComponent;
 import com.el.whippi.components.EHAlign;
+import com.el.whippi.components.text.Text;
 import com.el.whippi.htmldom.AHtmlElement;
 import com.el.whippi.htmldom.HtmlTag;
+import com.el.whippi.htmldom.HtmlText;
 
 /**
  *
@@ -75,11 +77,15 @@ public final class Cell {
         }
 
         style += "text-align: " + this.hAlign.getCssValue() + ";";
-        
+
         res.withAttribute("style", style);
 
         if (content != null) {
-            res.withChild(content.render());
+            if (this.head && content instanceof Text) {
+                res.withChild(new HtmlText(((Text) content).getText()));
+            } else {
+                res.withChild(content.render());
+            }
         }
 
         return res;
